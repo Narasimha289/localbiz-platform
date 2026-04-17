@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
+import SessionProvider from "@/components/common/SessionProvider";
 
 export const metadata: Metadata = {
   title: "Local Business Digital Platform",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col bg-white text-gray-900">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SessionProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );
