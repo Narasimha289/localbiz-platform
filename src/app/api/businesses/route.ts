@@ -62,6 +62,8 @@ export async function POST(request: Request) {
         state: data.state,
         pincode: data.pincode,
         status: "PENDING",
+        openingTime: data.openingTime,
+        closingTime: data.closingTime,
       },
       include: {
         category: true,
@@ -71,32 +73,83 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: true,
-        message: "Business created successfully",
+        message: "Business created successfully and submitted for approval.",
         business,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Create business error:", error);
+    console.error("Create business FULL error:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Something went wrong while creating the business",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while creating the business",
       },
       { status: 500 }
     );
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const city = searchParams.get("city") || "";
+
     const businesses = await prisma.business.findMany({
       where: {
         status: "APPROVED",
+        ...(search
+          ? {
+              businessName: {
+                contains: search,
+                mode: "insensitive",
+              },
+            }
+          : {}),
+        ...(category
+          ? {
+              categoryId: category,
+            }
+          : {}),
+        ...(city
+          ? {
+              OR: [
+                {
+                  city: {
+                    contains: city,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  state: {
+                    contains: city,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  address: {
+                    contains: city,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            }
+          : {}),
       },
       include: {
         category: true,
+        reviews: {
+          select: {
+            rating: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

@@ -25,6 +25,8 @@ export default function CreateBusinessForm() {
     city: "",
     state: "",
     pincode: "",
+    openingTime: "09:00",
+    closingTime: "20:00",
   });
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function CreateBusinessForm() {
         return;
       }
 
-      setSuccess("Business created successfully and submitted for approval.");
+      setSuccess(data.message || "Business created successfully and submitted for approval.");
       setForm({
         businessName: "",
         description: "",
@@ -79,6 +81,8 @@ export default function CreateBusinessForm() {
         city: "",
         state: "",
         pincode: "",
+        openingTime: "09:00",
+        closingTime: "20:00",
       });
     } catch {
       setError("Something went wrong. Please try again.");
@@ -168,6 +172,34 @@ export default function CreateBusinessForm() {
           placeholder="Enter address"
           required
         />
+      </div>
+
+      <div className="grid gap-5 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium">Opening Time</label>
+          <input
+            type="time"
+            value={form.openingTime}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, openingTime: e.target.value }))
+            }
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium">Closing Time</label>
+          <input
+            type="time"
+            value={form.closingTime}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, closingTime: e.target.value }))
+            }
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
+            required
+          />
+        </div>
       </div>
 
       <div className="grid gap-5 md:grid-cols-3">

@@ -10,6 +10,9 @@ export const createBusinessSchema = z.object({
   city: z.string().min(2, "City is required"),
   state: z.string().min(2, "State is required"),
   pincode: z.string().min(4, "Pincode is required"),
+  imageUrl: z.string().optional().or(z.literal("")),
+  openingTime: z.string().min(1, "Opening time is required"),
+  closingTime: z.string().min(1, "Closing time is required"),
 });
 
 export type CreateBusinessInput = z.infer<typeof createBusinessSchema>;
