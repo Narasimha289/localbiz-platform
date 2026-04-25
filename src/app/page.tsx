@@ -16,7 +16,7 @@ export default function HomePage() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <Link
             href="/businesses"
-            className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-gray-800 sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-gray-800 sm:w-auto"
           >
             Explore Businesses
           </Link>
