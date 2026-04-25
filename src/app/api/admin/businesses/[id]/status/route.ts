@@ -1,10 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -23,6 +25,8 @@ export async function PATCH(
       );
     }
 
+    const { id } = await context.params;
+
     const body = await request.json();
     const { status } = body;
 
@@ -32,8 +36,6 @@ export async function PATCH(
         { status: 400 }
       );
     }
-
-    const { id } = await params;
 
     const updatedBusiness = await prisma.business.update({
       where: { id },
