@@ -111,15 +111,21 @@ export default function PendingBusinessesList() {
           key={business.id}
           className="rounded-2xl border border-gray-200 p-6 shadow-sm"
         >
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h3 className="text-2xl font-bold">{business.businessName}</h3>
-              <p className="mt-2 text-gray-600">{business.description}</p>
+              <h3 className="text-lg font-bold sm:text-xl">
+                {business.businessName}
+              </h3>
+
+              <p className="mt-1 text-sm text-gray-600">
+                {business.description}
+              </p>
             </div>
 
-            <div className="rounded-full border border-yellow-300 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-800">
+            {/* STATUS BADGE HERE */}
+            <span className="inline-flex w-fit shrink-0 whitespace-nowrap rounded-full border border-yellow-200 bg-yellow-50 px-3 py-1 text-xs font-semibold text-yellow-700">
               {business.status}
-            </div>
+            </span>
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">

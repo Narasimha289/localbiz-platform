@@ -79,7 +79,7 @@ export default async function BusinessDetailsPage({
         <div className="flex flex-col gap-3 sm:flex-row">
           <a
             href={`tel:${business.phone}`}
-            className="inline-flex items-center justify-center rounded-xl bg-black px-5 py-3 font-semibold text-white"
+            className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white"
           >
             Call Now
           </a>

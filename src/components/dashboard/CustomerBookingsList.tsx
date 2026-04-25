@@ -91,7 +91,7 @@ export default function CustomerBookingsList() {
             key={booking.id}
             className="rounded-2xl border p-4 shadow-sm sm:p-6"
           >
-            <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h3 className="text-lg font-bold sm:text-xl">
                   {booking.business.businessName}
@@ -104,12 +104,12 @@ export default function CustomerBookingsList() {
                 ) : null}
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                <span className={getStatusBadge(booking.status)}>
+              <div className="flex shrink-0 flex-wrap items-start justify-start gap-2 sm:justify-end">
+                <span className={`${getStatusBadge(booking.status)} inline-flex w-fit whitespace-nowrap`}>
                   {booking.status}
                 </span>
 
-                <span className={getPaymentBadge(booking.paymentStatus)}>
+                <span className={`${getPaymentBadge(booking.paymentStatus)} inline-flex w-fit whitespace-nowrap`}>
                   Payment: {booking.paymentStatus || "N/A"}
                 </span>
               </div>

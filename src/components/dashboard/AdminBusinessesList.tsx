@@ -124,7 +124,7 @@ export default function AdminBusinessesList() {
           className="rounded-2xl border p-4 shadow-sm sm:p-6"
         >
           {/* Top */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h3 className="text-lg font-bold sm:text-xl">
                 {business.businessName}
@@ -134,8 +134,10 @@ export default function AdminBusinessesList() {
               </p>
             </div>
 
-            <div className={getStatusStyles(business.status)}>
-              {business.status}
+            <div className="flex shrink-0">
+              <span className={`${getStatusStyles(business.status)} inline-flex w-fit whitespace-nowrap`}>
+                {business.status}
+              </span>
             </div>
           </div>
 

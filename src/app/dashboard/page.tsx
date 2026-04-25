@@ -8,7 +8,6 @@ import OwnerBookingsList from "@/components/dashboard/OwnerBookingsList";
 import CustomerBookingsList from "@/components/dashboard/CustomerBookingsList";
 import OwnerServicesManager from "@/components/dashboard/OwnerServicesManager";
 import DashboardAnalytics from "@/components/dashboard/DashboardAnalytics";
-import AdminBusinessesList from "@/components/dashboard/AdminBusinessesList";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -19,7 +18,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold sm:text-3xl">Dashboard</h1>
@@ -41,15 +39,13 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* Analytics */}
-      <div className="mb-12">
-        <DashboardAnalytics />
-      </div>
-
       {/* OWNER */}
       {session.user.role === "OWNER" && (
         <div className="space-y-12">
-          
+          <section>
+            <DashboardAnalytics />
+          </section>
+
           <section>
             <h2 className="text-xl font-semibold">Create Business</h2>
             <div className="mt-4">
@@ -72,18 +68,15 @@ export default async function DashboardPage() {
           <section>
             <OwnerBookingsList />
           </section>
-
         </div>
       )}
 
       {/* ADMIN */}
       {session.user.role === "ADMIN" && (
         <div className="space-y-12">
-          
           <section>
-            <AdminBusinessesList />
+            <DashboardAnalytics />
           </section>
-
         </div>
       )}
 
@@ -93,7 +86,6 @@ export default async function DashboardPage() {
           <CustomerBookingsList />
         </div>
       )}
-
     </div>
   );
 }

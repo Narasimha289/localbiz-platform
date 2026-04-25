@@ -88,7 +88,7 @@ export default function OwnerBusinessesList() {
           className="rounded-2xl border p-4 shadow-sm sm:p-6"
         >
           {/* Top Section */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex flex-col gap-3 sm:flex-row">
               {business.imageUrl && (
                 <img
@@ -109,7 +109,7 @@ export default function OwnerBusinessesList() {
               </div>
             </div>
 
-            <div className={getStatusStyles(business.status)}>
+            <div className={`${getStatusStyles(business.status)} inline-flex w-fit shrink-0 whitespace-nowrap`}>
               {business.status}
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function OwnerBusinessesList() {
 
             <Link
               href={`/dashboard/businesses/${business.id}/edit`}
-              className="w-full rounded-xl bg-black px-4 py-2 text-center text-sm font-medium text-white sm:w-auto"
+              className="w-full rounded-xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 sm:w-auto"
             >
               Edit Business
             </Link>
