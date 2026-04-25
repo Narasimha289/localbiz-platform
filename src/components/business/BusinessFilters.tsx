@@ -14,7 +14,7 @@ type Business = {
   slug: string;
   businessName: string;
   description: string;
-  imageUrl?: string | null;
+  imageUrl: string | null;
   phone: string;
   email: string | null;
   city: string;

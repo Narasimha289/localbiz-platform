@@ -9,7 +9,7 @@ type RouteContext = {
   }>;
 };
 
-export async function PUT(request: Request, { params }: RouteContext) {
+export async function PATCH(request: Request, { params }: RouteContext) {
   try {
     const session = await auth();
 
@@ -60,10 +60,9 @@ export async function PUT(request: Request, { params }: RouteContext) {
     const service = await prisma.service.update({
       where: { id: serviceId },
       data: {
-        serviceName: parsed.data.serviceName,
-        description: parsed.data.description || null,
-        price: parsed.data.price,
-        durationMinutes: parsed.data.durationMinutes,
+        name: parsed.data.name,
+        price: Number(parsed.data.price),
+        duration: 30,
       },
     });
 

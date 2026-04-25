@@ -1,16 +1,18 @@
+import { Suspense } from "react";
 import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold">Login</h1>
-      <p className="mt-3 text-gray-600">
-        Access your account to manage your activity.
-      </p>
-
-      <div className="mt-8">
+    <div className="mx-auto max-w-md px-4 py-16 sm:px-6">
+      <Suspense
+        fallback={
+          <div className="rounded-2xl border border-gray-200 p-6 shadow-sm">
+            Loading login...
+          </div>
+        }
+      >
         <LoginForm />
-      </div>
+      </Suspense>
     </div>
   );
 }
