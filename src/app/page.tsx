@@ -16,14 +16,14 @@ export default function HomePage() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <Link
             href="/businesses"
-            className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-gray-800 sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 sm:w-auto"
           >
             Explore Businesses
           </Link>
 
           <Link
             href="/register"
-            className="inline-flex w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-6 py-3 text-base font-semibold text-gray-800 shadow-sm transition hover:bg-gray-100 sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-6 py-3 text-base font-semibold text-gray-800 shadow-sm transition hover:bg-gray-200 sm:w-auto"
           >
             Join as Business
           </Link>
