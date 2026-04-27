@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReviewForm from "@/components/business/ReviewForm";
 
 type Booking = {
   id: string;
   bookingDate: string;
   bookingTime: string;
+  businessId: string;
   notes: string | null;
   status: string;
   paymentStatus?: string;
@@ -15,6 +17,10 @@ type Booking = {
   };
   service?: {
     name: string;
+  } | null;
+  review?: {
+    rating: number;
+    comment: string | null;
   } | null;
 };
 
@@ -105,11 +111,19 @@ export default function CustomerBookingsList() {
               </div>
 
               <div className="flex shrink-0 flex-wrap items-start justify-start gap-2 sm:justify-end">
-                <span className={`${getStatusBadge(booking.status)} inline-flex w-fit whitespace-nowrap`}>
+                <span
+                  className={`${getStatusBadge(
+                    booking.status
+                  )} inline-flex w-fit whitespace-nowrap`}
+                >
                   {booking.status}
                 </span>
 
-                <span className={`${getPaymentBadge(booking.paymentStatus)} inline-flex w-fit whitespace-nowrap`}>
+                <span
+                  className={`${getPaymentBadge(
+                    booking.paymentStatus
+                  )} inline-flex w-fit whitespace-nowrap`}
+                >
                   Payment: {booking.paymentStatus || "N/A"}
                 </span>
               </div>
@@ -120,16 +134,27 @@ export default function CustomerBookingsList() {
                 <strong>Date:</strong>{" "}
                 {new Date(booking.bookingDate).toLocaleDateString()}
               </p>
+
               <p>
                 <strong>Time:</strong> {booking.bookingTime}
               </p>
+
               <p>
                 <strong>Amount:</strong> ₹{booking.amount ?? 0}
               </p>
+
               <p>
                 <strong>Notes:</strong> {booking.notes || "No notes"}
               </p>
             </div>
+
+            {booking.status === "COMPLETED" && (
+              <ReviewForm
+                businessId={booking.businessId}
+                bookingId={booking.id}
+                initialReview={booking.review || null}
+              />
+            )}
           </div>
         ))
       )}

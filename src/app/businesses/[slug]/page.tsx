@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import InquiryForm from "@/components/business/InquiryForm";
 import BookingForm from "@/components/business/BookingForm";
-import ReviewForm from "@/components/business/ReviewForm";
+
 
 type BusinessDetailsPageProps = {
   params: Promise<{
@@ -23,6 +23,29 @@ async function getBusiness(slug: string) {
   return response.json();
 }
 
+// ⭐ Star Display
+function DisplayStars({ rating }: { rating: number }) {
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          className={
+            star <= Math.round(rating)
+              ? "text-yellow-400 text-lg"
+              : "text-gray-300 text-lg"
+          }
+        >
+          ★
+        </span>
+      ))}
+      <span className="ml-2 text-sm text-gray-600">
+        ({rating.toFixed(1)})
+      </span>
+    </div>
+  );
+}
+
 export default async function BusinessDetailsPage({
   params,
 }: BusinessDetailsPageProps) {
@@ -34,18 +57,29 @@ export default async function BusinessDetailsPage({
 
   const averageRating =
     totalReviews > 0
-      ? (
-          business.reviews.reduce(
-            (sum: number, review: any) => sum + review.rating,
-            0
-          ) / totalReviews
-        ).toFixed(1)
-      : "0.0";
+      ? business.reviews.reduce(
+          (sum: number, review: any) => sum + review.rating,
+          0
+        ) / totalReviews
+      : 0;
+
+  // 📊 Distribution Logic
+  const ratingCounts = [0, 0, 0, 0, 0];
+
+  business.reviews.forEach((review: any) => {
+    ratingCounts[review.rating - 1]++;
+  });
+
+  const getPercentage = (count: number) => {
+    return totalReviews === 0
+      ? 0
+      : Math.round((count / totalReviews) * 100);
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="space-y-8">
-        
+
         {/* Image */}
         {business.imageUrl && (
           <img
@@ -62,9 +96,7 @@ export default async function BusinessDetailsPage({
           </h1>
 
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
-            <span className="rounded-full bg-yellow-50 px-3 py-1 font-medium text-yellow-700">
-              ⭐ {averageRating}
-            </span>
+            <DisplayStars rating={averageRating} />
             <span className="text-gray-600">
               {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
             </span>
@@ -94,10 +126,8 @@ export default async function BusinessDetailsPage({
 
         {/* Info Grid */}
         <div className="grid gap-6 md:grid-cols-2">
-          
-          <div className="rounded-2xl border border-gray-200 p-5">
+          <div className="rounded-2xl border p-5">
             <h2 className="text-lg font-semibold">Business Info</h2>
-
             <div className="mt-4 space-y-2 text-sm text-gray-700">
               <p><strong>Category:</strong> {business.category?.name || "N/A"}</p>
               <p><strong>Phone:</strong> {business.phone}</p>
@@ -106,25 +136,14 @@ export default async function BusinessDetailsPage({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-gray-200 p-5">
+          <div className="rounded-2xl border p-5">
             <h2 className="text-lg font-semibold">Location</h2>
-
             <div className="mt-4 space-y-2 text-sm text-gray-700">
               <p><strong>Address:</strong> {business.address}</p>
               <p><strong>City:</strong> {business.city}</p>
               <p><strong>State:</strong> {business.state}</p>
               <p><strong>Pincode:</strong> {business.pincode}</p>
             </div>
-          </div>
-        </div>
-
-        {/* Owner */}
-        <div className="rounded-2xl border border-gray-200 p-5">
-          <h2 className="text-lg font-semibold">Owner Info</h2>
-
-          <div className="mt-4 space-y-2 text-sm text-gray-700">
-            <p><strong>Name:</strong> {business.owner?.name || "N/A"}</p>
-            <p><strong>Email:</strong> {business.owner?.email || "N/A"}</p>
           </div>
         </div>
 
@@ -138,34 +157,58 @@ export default async function BusinessDetailsPage({
             openingTime={business.openingTime}
             closingTime={business.closingTime}
           />
-
-          <ReviewForm businessId={business.id} />
         </div>
 
         {/* Reviews */}
-        <div className="rounded-2xl border border-gray-200 p-5">
-          <h2 className="text-xl font-bold">
-            Customer Reviews ({totalReviews})
-          </h2>
+        <div className="rounded-2xl border p-5">
+          
+          {/* ⭐ Summary + 📊 Distribution */}
+          <div className="mb-6">
+            <h2 className="text-xl font-bold">Customer Reviews</h2>
 
+            <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+              
+              <div>
+                <DisplayStars rating={averageRating} />
+                <p className="text-sm text-gray-600 mt-1">
+                  {totalReviews} reviews
+                </p>
+              </div>
+
+              <div className="w-full max-w-xs space-y-1">
+                {[5, 4, 3, 2, 1].map((star) => {
+                  const count = ratingCounts[star - 1];
+                  const percentage = getPercentage(count);
+
+                  return (
+                    <div key={star} className="flex items-center gap-2 text-sm">
+                      <span className="w-6">{star}★</span>
+
+                      <div className="flex-1 h-2 bg-gray-200 rounded">
+                        <div
+                          className="h-2 bg-yellow-400 rounded"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+
+                      <span className="w-10 text-right">{percentage}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Review List */}
           {totalReviews === 0 ? (
-            <p className="mt-3 text-gray-600">No reviews yet.</p>
+            <p className="text-gray-600">No reviews yet.</p>
           ) : (
-            <div className="mt-5 space-y-4">
+            <div className="space-y-4">
               {business.reviews.map((review: any) => (
-                <div
-                  key={review.id}
-                  className="rounded-xl border border-gray-200 p-4"
-                >
-                  <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
-                    <h3 className="font-semibold">
-                      {review.user.name}
-                    </h3>
-
-                    <span className="text-sm text-yellow-600">
-                      {"★".repeat(review.rating)}
-                      {"☆".repeat(5 - review.rating)}
-                    </span>
+                <div key={review.id} className="rounded-xl border p-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <h3 className="font-semibold">{review.user.name}</h3>
+                    <DisplayStars rating={review.rating} />
                   </div>
 
                   <p className="mt-2 text-sm text-gray-600">

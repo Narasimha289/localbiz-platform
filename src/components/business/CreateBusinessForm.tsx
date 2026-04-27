@@ -27,6 +27,7 @@ export default function CreateBusinessForm() {
     pincode: "",
     openingTime: "09:00",
     closingTime: "20:00",
+    image: null as File | null,
   });
 
   useEffect(() => {
@@ -55,12 +56,27 @@ export default function CreateBusinessForm() {
     setSuccess("");
 
     try {
+      const formData = new FormData();
+
+      formData.append("businessName", form.businessName);
+      formData.append("description", form.description);
+      formData.append("categoryId", form.categoryId);
+      formData.append("phone", form.phone);
+      formData.append("email", form.email);
+      formData.append("address", form.address);
+      formData.append("city", form.city);
+      formData.append("state", form.state);
+      formData.append("pincode", form.pincode);
+      formData.append("openingTime", form.openingTime);
+      formData.append("closingTime", form.closingTime);
+
+      if (form.image) {
+        formData.append("image", form.image);
+      }
+
       const response = await fetch("/api/businesses", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
+        body: formData,
       });
 
       const data = await response.json();
@@ -70,7 +86,10 @@ export default function CreateBusinessForm() {
         return;
       }
 
-      setSuccess(data.message || "Business created successfully and submitted for approval.");
+      setSuccess(
+        data.message || "Business created successfully and submitted for approval."
+      );
+
       setForm({
         businessName: "",
         description: "",
@@ -83,8 +102,18 @@ export default function CreateBusinessForm() {
         pincode: "",
         openingTime: "09:00",
         closingTime: "20:00",
+        image: null,
       });
-    } catch {
+
+      const imageInput = document.getElementById(
+        "business-image"
+      ) as HTMLInputElement | null;
+
+      if (imageInput) {
+        imageInput.value = "";
+      }
+    } catch (error) {
+      console.error("Create business error:", error);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -101,7 +130,9 @@ export default function CreateBusinessForm() {
         <input
           type="text"
           value={form.businessName}
-          onChange={(e) => setForm((prev) => ({ ...prev, businessName: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, businessName: e.target.value }))
+          }
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           placeholder="Enter business name"
           required
@@ -112,7 +143,9 @@ export default function CreateBusinessForm() {
         <label className="mb-2 block text-sm font-medium">Description</label>
         <textarea
           value={form.description}
-          onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, description: e.target.value }))
+          }
           className="min-h-28 w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           placeholder="Describe your business"
           required
@@ -120,10 +153,31 @@ export default function CreateBusinessForm() {
       </div>
 
       <div>
+        <label className="mb-2 block text-sm font-medium">Business Image</label>
+        <input
+          id="business-image"
+          type="file"
+          accept="image/*"
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              image: e.target.files?.[0] || null,
+            }))
+          }
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black"
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          Upload a clear image for your business listing.
+        </p>
+      </div>
+
+      <div>
         <label className="mb-2 block text-sm font-medium">Category</label>
         <select
           value={form.categoryId}
-          onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, categoryId: e.target.value }))
+          }
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           required
           disabled={loadingCategories}
@@ -131,6 +185,7 @@ export default function CreateBusinessForm() {
           <option value="">
             {loadingCategories ? "Loading categories..." : "Select category"}
           </option>
+
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
@@ -144,7 +199,9 @@ export default function CreateBusinessForm() {
         <input
           type="text"
           value={form.phone}
-          onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, phone: e.target.value }))
+          }
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           placeholder="Enter business phone"
           required
@@ -156,7 +213,9 @@ export default function CreateBusinessForm() {
         <input
           type="email"
           value={form.email}
-          onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, email: e.target.value }))
+          }
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           placeholder="Enter business email"
         />
@@ -167,7 +226,9 @@ export default function CreateBusinessForm() {
         <input
           type="text"
           value={form.address}
-          onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, address: e.target.value }))
+          }
           className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
           placeholder="Enter address"
           required
@@ -208,7 +269,9 @@ export default function CreateBusinessForm() {
           <input
             type="text"
             value={form.city}
-            onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, city: e.target.value }))
+            }
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
             placeholder="City"
             required
@@ -220,7 +283,9 @@ export default function CreateBusinessForm() {
           <input
             type="text"
             value={form.state}
-            onChange={(e) => setForm((prev) => ({ ...prev, state: e.target.value }))}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, state: e.target.value }))
+            }
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
             placeholder="State"
             required
@@ -232,7 +297,9 @@ export default function CreateBusinessForm() {
           <input
             type="text"
             value={form.pincode}
-            onChange={(e) => setForm((prev) => ({ ...prev, pincode: e.target.value }))}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, pincode: e.target.value }))
+            }
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
             placeholder="Pincode"
             required

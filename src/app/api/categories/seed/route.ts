@@ -6,6 +6,7 @@ export async function GET() {
     const categories = [
       { name: "Salons & Beauty", slug: "salons-beauty" },
       { name: "Clinics", slug: "clinics" },
+      { name: "Hotels & Resorts", slug: "hotels-resorts" },
       { name: "Gyms & Fitness", slug: "gyms-fitness" },
       { name: "Restaurants & Cafes", slug: "restaurants-cafes" },
       { name: "Tutors & Coaching", slug: "tutors-coaching" },

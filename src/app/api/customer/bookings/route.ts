@@ -28,6 +28,12 @@ export async function GET() {
             name: true,
           },
         },
+        review: {
+          select: {
+            rating: true,
+            comment: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

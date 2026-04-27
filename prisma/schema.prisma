@@ -112,27 +112,28 @@ model Inquiry {
 }
 
 model Booking {
-  id               String        @id @default(cuid())
-  businessId       String
-  serviceId        String
-  customerName     String
-  customerEmail    String
-  customerPhone    String?
-  bookingDate      DateTime
-  bookingTime      String
-  notes            String?
-  status           BookingStatus @default(PENDING)
+  id            String        @id @default(cuid())
+  businessId    String
+  serviceId     String
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  bookingDate   DateTime
+  bookingTime   String
+  notes         String?
+  status        BookingStatus @default(PENDING)
 
-  paymentStatus    String        @default("PENDING")
-  razorpayOrderId  String?
+  paymentStatus     String  @default("PENDING")
+  razorpayOrderId   String?
   razorpayPaymentId String?
-  amount           Float?
+  amount            Float?
 
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  review    Review?
 
-  business         Business      @relation(fields: [businessId], references: [id])
-  service          Service       @relation(fields: [serviceId], references: [id])
+  business Business @relation(fields: [businessId], references: [id])
+  service  Service  @relation(fields: [serviceId], references: [id])
 }
 
 model Review {
@@ -143,8 +144,10 @@ model Review {
   comment    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  bookingId  String   @unique
   business   Business @relation(fields: [businessId], references: [id])
   user       User     @relation(fields: [userId], references: [id])
+  booking    Booking  @relation(fields: [bookingId], references: [id])
 }
 
 enum Role {
